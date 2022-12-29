@@ -4,7 +4,7 @@ Benchmark performance of a trivial build using =stdenv.mkDerivation= vs. a
 plain =derivation=.
 
 This build simply calls =touch= on =$out=.
-Setting the argument =count' controls the number of builds to be tested.
+Setting the argument =count= controls the number of builds to be tested.
 
 The outputs of this expression are two derivations which depend on =count=
 inputs using =stdenv.mkDerivation= and =derivation= respectively.
