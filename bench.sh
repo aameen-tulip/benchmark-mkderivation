@@ -7,10 +7,10 @@ set -o pipefail
 : "${COUNT:=1000}";
 
 # Ensure dependencies are built first.
-$NIX build --no-link      \
-  $NIXPKGS_REF#bash       \
-  $NIXPKGS_REF#coreutils  \
-  $NIXPKGS_REF#stdenv     \
+$NIX build --no-link        \
+  "$NIXPKGS_REF#bash"       \
+  "$NIXPKGS_REF#coreutils"  \
+  "$NIXPKGS_REF#stdenv"     \
 ;
 
 echo "mkDerivation x $COUNT:" >&2;
