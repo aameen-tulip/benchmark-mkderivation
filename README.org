@@ -26,8 +26,11 @@ inputs using =stdenv.mkDerivation= and =derivation= respectively.
 #+END_SRC
 
 * Setup
-Notably these disable any extraneous phases, so we basically just run
-~installPhase = "touch \"$out\";";~ here.
+Notably these tests disable any extraneous =stdenv.mkDerivation= phases, so
+we basically just run ~installPhase = "touch \"$out\";";~ here.
+I went out of my way to be as "fair" as possible to =stdenv.mkDerivation=
+and tuned/optimized its settings as best as I could.
+
 In practice the performance will be worse if people forget to disable things
 like =patchPhase=, =configurePhase=, and =fixupPhase= when they don't really
 require them.
