@@ -1,0 +1,48 @@
+#+TITLE: Benchmark mkDerivation vs. Derivation
+
+Benchmark performance of a trivial build using =stdenv.mkDerivation= vs. a
+plain =derivation=.
+
+This build simply calls =touch= on =$out=.
+Setting the argument =count' controls the number of builds to be tested.
+
+The outputs of this expression are two derivations which depend on =count=
+inputs using =stdenv.mkDerivation= and =derivation= respectively.
+
+* Getting Started
+#+BEGIN_SRC shell
+  $ ./bench.sh;
+  mkDerivation x 1000:
+
+  real    0m22.482s
+  user    0m0.539s
+  sys     0m0.209s
+
+  derivation x 1000:
+
+  real    0m11.807s
+  user    0m0.274s
+  sys     0m0.140s
+#+END_SRC
+
+* Caveats
+Because Nix attempts to open input files for derivations, you may hit a
+"too many open files" error if you increase =count= beyond your system limit.
+
+The default limit of 1,000 was chosen because it safely falls below the 1,024
+limit found on some Unix systems.
+
+* Findings
+After running this benchmark over 1,000,000 builds, I found that for this
+trivial operation =derivation= was roughly twice as fast
+as =stdenv.mkDerivation=.
+
+My personal suspicion is that the overhead of processing =setup.sh= for each
+build that uses =stdenv.mkDerivation= accounts for the difference in runtime.
+I want to be clear here and say "I do not think the use of
+=stdenv.mkDerivation= is bad."
+On the contrary the routine is incredibly useful, and the structure of
+=setup.sh= and its phases are an essential tool.
+Rather I'm hoping to show that for very trivial operations such as copy,
+moving, or modifying permissions on files - the overhead of =setup.sh= may
+lead developers to use =derivation= directly in these cases.
