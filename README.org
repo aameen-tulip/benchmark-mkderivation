@@ -25,6 +25,18 @@ inputs using =stdenv.mkDerivation= and =derivation= respectively.
   sys     0m0.140s
 #+END_SRC
 
+* Setup
+Notably these disable any extraneous phases, so we basically just run
+~installPhase = "touch \"$out\";";~ here.
+In practice the performance will be worse if people forget to disable things
+like =patchPhase=, =configurePhase=, and =fixupPhase= when they don't really
+require them.
+If we're being honest it's uncommon for people to disable these, particularly
+=fixupPhase= which is the most costly.
+
+You can experiment with the additional runtime spent when those phases are
+activated by modifying =default.nix=.
+
 * Caveats
 Because Nix attempts to open input files for derivations, you may hit a
 "too many open files" error if you increase =count= beyond your system limit.
